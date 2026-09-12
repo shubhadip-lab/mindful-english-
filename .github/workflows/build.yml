@@ -1,18 +1,49 @@
 name: Build APK
+
 on: [push, workflow_dispatch]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: android-actions/setup-android@v3
-      - uses: gradle/actions/setup-gradle@v3
-      - run: gradle assembleDebug
-      - uses: actions/upload-artifact@v4
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Gradle 8.4
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.4'
+
+      - name: Build APK
+        run: |
+          if [ -f "settings.gradle.kts" ]; then
+            gradle assembleDebug
+          elif [ -d "MindfulEnglishTutor" ] && [ -f "MindfulEnglishTutor/settings.gradle.kts" ]; then
+            cd MindfulEnglishTutor
+            gradle assembleDebug
+          else
+            echo "Searching for settings.gradle.kts..."
+            TARGET_DIR=$(find . -name "settings.gradle.kts" -exec dirname {} \;)
+            if [ -n "$TARGET_DIR" ]; then
+              cd "$TARGET_DIR"
+              gradle assembleDebug
+            else
+              echo "Error: Could not find settings.gradle.kts"
+              exit 1
+            fi
+          fi
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: MindfulEnglish-APK
-          path: app/build/outputs/apk/debug/*.apk
+          path: "**/app/build/outputs/apk/debug/*.apk"
