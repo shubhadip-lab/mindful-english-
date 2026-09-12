@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sage_green_primary">#2D5A43</color>
+    <color name="sage_green_light">#E8F1EC</color>
+    <color name="sage_green_dark">#1B3829</color>
+    <color name="warm_gold">#C89D52</color>
+    <color name="warm_cream">#FBF9F5</color>
+    <color name="text_dark">#2C3330</color>
+    <color name="text_muted">#68756E</color>
+    <color name="white">#FFFFFF</color>
+    <color name="accent_calm_blue">#4A7C8F</color>
+    <color name="stop_red">#A84242</color>
+    <color name="card_background">#FFFFFF</color>
+</resources>
